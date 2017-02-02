@@ -25,7 +25,12 @@
     - exakat
 
 - name: test exakat-PHP
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="php          = "= line="php          = /usr/local/bin/php70"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="php          = "= line="php          = /usr/local/bin/php71"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 7.2
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php72        = /path/to/php72"= line="php72        = /usr/local/bin/php72"
   tags:
     - exakat
 
@@ -41,16 +46,6 @@
 
 - name: test exakat-PHP 5.6
   lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php56        = /path/to/php56"= line="php56        = /usr/local/bin/php56"
-  tags:
-    - exakat
-
-- name: test exakat-PHP 5.5
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php55        = /path/to/php55"= line="php55        = /usr/local/bin/php55"
-  tags:
-    - exakat
-
-- name: test exakat-PHP 5.6
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php54        = /path/to/php56"= line="php54        = /usr/local/bin/php54"
   tags:
     - exakat
 

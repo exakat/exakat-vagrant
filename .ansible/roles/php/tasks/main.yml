@@ -1,6 +1,7 @@
 ---
 # tasks file for php
-- apt: update_cache=yes
+- name: update caches
+  shell: apt-get update
   tags:
     - php
 
@@ -62,8 +63,36 @@
   tags:
     - php
 
-- name: checkout PHP 7.1
+- name: checkout PHP 7.2
   git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=master clone=no force=yes
+  tags:
+    - php
+
+- name: build PHP 7.2
+  shell: cd /opt/source/php-src; make clean; ./buildconf --force; ./configure --prefix="/usr/local/bin/php-7.2" --with-config-file-path="/usr/local/etc/php-7.1" --enable-mbstring --enable-tokenizer --with-curl=/usr --enable-phar --with-sqlite3 --enable-json --disable-all; make -j {{ ansible_processor_count * 2 }} ; make install
+  tags:
+    - php
+
+- name: php72 config
+  file:
+    path: /usr/local/etc/php-7.2/
+    state: directory
+    mode: 0755
+
+- name: php72 config memory_limit
+  lineinfile:
+    dest: /usr/local/etc/php-7.2/php.ini
+    line: 'memory_limit = -1'
+    state: present
+    create: yes
+
+- name: php71 symlink
+  file: src=/usr/local/bin/php-7.2/bin/php dest=/usr/local/bin/php72 state=link
+  tags:
+    - php
+    
+- name: checkout PHP 7.1
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.1.1 clone=no force=yes
   tags:
     - php
 
@@ -77,8 +106,21 @@
   tags:
     - php
 
+- name: php71 config
+  file:
+    path: /usr/local/etc/php-7.1/
+    state: directory
+    mode: 0755
+
+- name: php71 config memory_limit
+  lineinfile:
+    dest: /usr/local/etc/php-7.1/php.ini
+    line: 'memory_limit = -1'
+    state: present
+    create: yes
+
 - name: checkout PHP 7.0
-  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.0.4 clone=no force=yes
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.0.15 clone=no force=yes
   tags:
     - php
 
@@ -86,6 +128,19 @@
   shell: cd /opt/source/php-src; make clean; ./buildconf --force; ./configure --prefix="/usr/local/bin/php-7.0" --with-config-file-path="/usr/local/etc/php-7.0" --enable-mbstring --enable-tokenizer  --with-curl=/usr --enable-phar --with-sqlite3 --enable-json --enable-hash --disable-all; make -j {{ ansible_processor_count * 2 }} ; make install
   tags:
     - php
+
+- name: php70 config
+  file:
+    path: /usr/local/etc/php-7.0/
+    state: directory
+    mode: 0755
+
+- name: php70 config memory_limit
+  lineinfile:
+    dest: /usr/local/etc/php-7.0/php.ini
+    line: 'memory_limit = -1'
+    state: present
+    create: yes
 
 - name: php70 symlink
   file: src=/usr/local/bin/php-7.0/bin/php dest=/usr/local/bin/php70 state=link
@@ -98,7 +153,7 @@
     - php
 
 - name: checkout PHP 5.6
-  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-5.6.19 clone=no force=yes
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-5.6.30 clone=no force=yes
   tags:
     - php
 
@@ -107,23 +162,21 @@
   tags:
     - php
 
+- name: php56 config
+  file:
+    path: /usr/local/etc/php-5.6/
+    state: directory
+    mode: 0755
+
+- name: php56 config memory_limit
+  lineinfile:
+    dest: /usr/local/etc/php-5.6/php.ini
+    line: 'memory_limit = -1'
+    state: present
+    create: yes
+
 - name: php 5.6 symlink
   file: src=/usr/local/bin/php-5.6/bin/php dest=/usr/local/bin/php56 state=link
-  tags:
-    - php
-
-- name: checkout PHP 5.5
-  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-5.5.33 clone=no force=yes
-  tags:
-    - php
-
-- name: build PHP 5.5
-  shell: cd /opt/source/php-src; make clean; ./buildconf --force; ./configure --prefix="/usr/local/bin/php-5.5" --with-config-file-path="/usr/local/etc/php-5.5" --enable-mbstring --enable-tokenizer --with-sqlite3 --enable-json --disable-all; make -j {{ ansible_processor_count * 2 }} ; make install
-  tags:
-    - php
-
-- name: php 5.5 symlink
-  file: src=/usr/local/bin/php-5.5/bin/php dest=/usr/local/bin/php55 state=link
   tags:
     - php
 
