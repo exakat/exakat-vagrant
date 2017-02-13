@@ -21,9 +21,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.gui = false
     vb.customize ["modifyvm", :id, "--memory", "2048", "--cpus", "2"]
   end
- 
-  config.vm.network "forwarded_port", guest: 7447, host: 7447
 
+  config.vm.network "forwarded_port", guest: 7447, host: 7447
 
 # config.vm.provision "ansible_local" do |ansible|
   config.vm.provision :ansible do |ansible|

@@ -86,11 +86,11 @@
     state: present
     create: yes
 
-- name: php71 symlink
+- name: php72 symlink
   file: src=/usr/local/bin/php-7.2/bin/php dest=/usr/local/bin/php72 state=link
   tags:
     - php
-    
+
 - name: checkout PHP 7.1
   git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.1.1 clone=no force=yes
   tags:
@@ -141,11 +141,6 @@
     line: 'memory_limit = -1'
     state: present
     create: yes
-
-- name: php70 symlink
-  file: src=/usr/local/bin/php-7.0/bin/php dest=/usr/local/bin/php70 state=link
-  tags:
-    - php
 
 - name: php symlink (for running exakat)
   file: src=/usr/local/bin/php-7.0/bin/php dest=/usr/local/bin/php state=link
