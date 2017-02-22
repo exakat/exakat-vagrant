@@ -6,11 +6,15 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "default"
+  config.vm.provider "virtualbox"
 
   if OS.mac? then
-#    config.vm.box = "parallels/debian-8.2"
-    ## Tested and failed (2017-01)
-   config.vm.box = "parallels/debian-8.6"
+    ## Tested and works (2017-02), --provider=virtualbox (5.0 max)
+    config.vm.box = "debian/jessie64"
+    ## Tested and works (2017-02), --provider=virtualbox
+    #    config.vm.box = "parallels/debian-8.2"
+    ## Tested and failed (2017-02)
+    #  config.vm.box = "parallels/debian-8.6"
   else
     config.vm.box = "debian/jessie64"
   end
