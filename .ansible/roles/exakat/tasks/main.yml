@@ -13,3 +13,50 @@
   shell: cd /home/vagrant/; php exakat.phar doctor
   tags:
     - exakat
+
+- name: download exakat
+  get_url: url=http://dist.exakat.io/versions/index.php?file=latest dest=/home/vagrant/exakat.phar mode=0777
+  tags:
+    - exakat
+ 
+- name: test exakat
+  shell: php /home/vagrant/exakat.phar doctor
+  tags:
+    - exakat
+
+- name: test exakat-PHP
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="php          = "= line="php          = /usr/local/bin/php71"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 7.2
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php72        = /path/to/php72"= line="php72        = /usr/local/bin/php72"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 7.1
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php71        = /path/to/php71"= line="php71        = /usr/local/bin/php71"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 7.0
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php70        = /path/to/php70"= line="php70        = /usr/local/bin/php70"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 5.6
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php56        = /path/to/php56"= line="php56        = /usr/local/bin/php56"
+  tags:
+    - exakat
+
+- name: stop neo4j
+  shell: cd /home/vagrant/neo4j/; ./bin/neo4j stop
+  tags:
+    - exakat
+
+- name: control over neo4j
+  file: path=/home/vagrant/ recurse=yes owner=vagrant
+  tags:
+    - exakat
+
+## Still needs to modify the config/exakat.ini file

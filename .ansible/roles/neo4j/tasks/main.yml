@@ -11,14 +11,8 @@
 - name: Clean neo4j
   file: path=/home/vagrant/neo4j state=absent
 
-- name: update ulimit to 40000
-  lineinfile: dest=/etc/security/limits.conf  line={{ item }}
-  with_items:
-    - "neo4j   soft    nofile  40000"
-    - "neo4j   hard    nofile  40000"
-
-- name: Downlad neo4j 2.3.7
-  get_url: url=http://dist.neo4j.org/neo4j-community-2.3.7-unix.tar.gz dest=/home/vagrant/neo4j.tar.gz mode=0750
+- name: Downlad neo4j 2.3.9
+  get_url: url=http://dist.neo4j.org/neo4j-community-2.3.9-unix.tar.gz dest=/home/vagrant/neo4j.tar.gz mode=0750
   tags:
     - neo4j
 
@@ -28,7 +22,7 @@
     - neo4j
 
 - name: Rename neo4j distribution to neo4j
-  shell: mv /home/vagrant/neo4j-community-2.3.7 /home/vagrant/neo4j
+  shell: mv /home/vagrant/neo4j-community-2.3.9 /home/vagrant/neo4j
   tags:
     - neo4j
 
@@ -57,12 +51,11 @@
   lineinfile: dest=/home/vagrant/neo4j-gremlin-plugin/pom.xml regexp="    </contributors>" line="    </contributors>\n  \n  <repositories>\n   <repository>\n     <id>snapshots-repo</id>\n     <url>https://oss.sonatype.org/content/repositories/snapshots</url>\n     <releases><enabled>false</enabled></releases>\n     <snapshots><enabled>true</enabled></snapshots>\n   </repository>\n </repositories>\n"
 
 - name: Adapt gremlin compilation
-  lineinfile: dest={{ item.dest }} regexp={{ item.regexp }} line={{ item.line }}
-  with_items:
-    - {dest: "/home/vagrant/neo4j-gremlin-plugin/pom.xml", regexp: "<version>2.3.1</version>", line: "<version>2.3.5</version>"}
-    - {dest: "/home/vagrant/neo4j-gremlin-plugin/tinkerpop2/pom.xml", regexp: "<version>2.3.1</version>", line: "<version>2.3.5</version>"}
-    - {dest: "/home/vagrant/neo4j-gremlin-plugin/tinkerpop3/pom.xml", regexp: "<version>2.3.1</version>", line: "<version>2.3.5</version>"}
-    - {dest: "/home/vagrant/neo4j-gremlin-plugin/tinkerpop3/pom.xml", regexp: "<tinkerpop-version>3.1.0-incubating</tinkerpop-version>", line: "<tinkerpop-version>3.2.0-incubating</tinkerpop-version>"}
+#  lineinfile: dest=/home/vagrant/neo4j-gremlin-plugin/pom.xml regexp="    <version>2.3.1</version>" line="    <version>2.3.5</version>"
+#  lineinfile: dest=/home/vagrant/neo4j-gremlin-plugin/tinkerpop2/pom.xml regexp="        <version>2.3.1</version>" line="        <version>2.3.5</version>"
+#  lineinfile: dest=/home/vagrant/neo4j-gremlin-plugin/tinkerpop3/pom.xml regexp="        <version>2.3.1</version>" line="        <version>2.3.5</version>"
+
+  lineinfile: dest=/home/vagrant/neo4j-gremlin-plugin/tinkerpop3/pom.xml regexp="        <tinkerpop-version>3.1.0-incubating</tinkerpop-version>" line="        <tinkerpop-version>3.2.0-incubating</tinkerpop-version>"
 
 - name: Build gremlin 3.0
   shell: cd /home/vagrant/neo4j-gremlin-plugin; mvn -T 2C clean package -Dtp.version=3
