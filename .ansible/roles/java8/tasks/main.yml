@@ -1,28 +1,34 @@
 ---
 # tasks file for java8
 - name: add java repository
-  apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' state=present
+  apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main' state=present
+  tags:
+    - java
 
 - name: add java src repository
-  apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' state=present
+  apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main' state=present
+  tags:
+    - java
 
 - name: add java key repository
   apt_key: id=EEA14886 keyserver=keyserver.ubuntu.com state=present
+  tags:
+    - java
 
 - name: Accept Java 8 Licence
   shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | tee /etc/oracle-java-8-licence-acceptance | /usr/bin/debconf-set-selections
   args:
     creates: /etc/oracle-java-8-licence-acceptance
-
-- apt: update_cache=yes
+  tags:
+    - java
 
 # Common configurations to be run on all hosts
 - name: Install default packages
-  apt: pkg={{item}} state=latest update_cache=yes cache_valid_time=3600
+  apt: pkg={{item}} state=latest update_cache=yes cache_valid_time=3600 force=yes
   with_items:
   - oracle-java8-installer
   - oracle-java8-set-default
-    #- libt1-dev
   tags:
+    - java
     - apt
 
