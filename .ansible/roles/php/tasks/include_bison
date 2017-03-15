@@ -1,4 +1,12 @@
 ---
+- name: Remove bison 3
+  apt: pkg={{item}} state=absent
+  with_items:
+    - bison
+    - libbison-dev
+  tags:
+    - php
+
 - name: download file and force basic auth
   get_url: url=http://launchpadlibrarian.net/140087283/libbison-dev_2.7.1.dfsg-1_amd64.deb dest=/opt/
   become: yes
