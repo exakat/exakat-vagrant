@@ -5,6 +5,6 @@
   roles:
     - php
     - java8
-    - neo4j
+    - gremlin
     - exakat
 

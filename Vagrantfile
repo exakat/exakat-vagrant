@@ -2,11 +2,12 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "default"
   config.vm.provider "virtualbox"
+  vagrant_dir = File.expand_path(File.dirname(__FILE__))
+  config.vm.synced_folder "#{vagrant_dir}/projects", "/home/vagrant/projects"
 
   if OS.mac? then
     ## Tested and works (2017-02), --provider=virtualbox (5.0 max)
@@ -28,13 +29,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network "forwarded_port", guest: 7447, host: 7447
 
-# config.vm.provision "ansible_local" do |ansible|
-  config.vm.provision :ansible do |ansible|
+  config.vm.provision :ansible_local do |ansible|
     ansible.verbose = "vvvv"
+    ansible.install_mode = "pip"
     ansible.raw_arguments = ['--timeout=300']
-    ansible.sudo = true
+    ansible.become = true
     ansible.playbook = ".ansible/exakat.yml"
-    #ansible.install = true
+    ansible.version = "latest"
   end
 
   config.vm.post_up_message = "    Welcome to Exakat !"

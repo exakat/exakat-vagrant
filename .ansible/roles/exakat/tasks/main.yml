@@ -4,11 +4,6 @@
   tags:
     - exakat
 
-- name: clean database
-  shell: cd /home/vagrant/; php exakat.phar cleandb 
-  tags:
-    - exakat
-
 - name: run doctor 
   shell: cd /home/vagrant/; php exakat.phar doctor
   tags:
@@ -25,36 +20,36 @@
     - exakat
 
 - name: test exakat-PHP
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="php          = "= line="php          = /usr/local/bin/php71"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^php =" line="php = /usr/local/bin/php72"
+  tags:
+    - exakat
+
+- name: test exakat-PHP 7.3
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^;php73 =" line="php73 = /usr/local/bin/php73"
   tags:
     - exakat
 
 - name: test exakat-PHP 7.2
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php72        = /path/to/php72"= line="php72        = /usr/local/bin/php72"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^;php72 =" line="php72 = /usr/local/bin/php72"
   tags:
     - exakat
 
 - name: test exakat-PHP 7.1
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php71        = /path/to/php71"= line="php71        = /usr/local/bin/php71"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^;php71 =" line="php71 = /usr/local/bin/php71"
   tags:
     - exakat
 
 - name: test exakat-PHP 7.0
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php70        = /path/to/php70"= line="php70        = /usr/local/bin/php70"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^;php70 =" line="php70 = /usr/local/bin/php70"
   tags:
     - exakat
 
 - name: test exakat-PHP 5.6
-  lineinfile: dest=/home/vagrant/config/exakat.ini regexp=";php56        = /path/to/php56"= line="php56        = /usr/local/bin/php56"
+  lineinfile: dest=/home/vagrant/config/exakat.ini regexp="^;php56 =" line="php56 = /usr/local/bin/php56"
   tags:
     - exakat
 
-- name: stop neo4j
-  shell: cd /home/vagrant/neo4j/; ./bin/neo4j stop
-  tags:
-    - exakat
-
-- name: control over neo4j
+- name: control over the whole folder
   file: path=/home/vagrant/ recurse=yes owner=vagrant
   tags:
     - exakat

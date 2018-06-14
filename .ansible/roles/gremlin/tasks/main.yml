@@ -1,0 +1,45 @@
+---
+- name: Install git and maven
+  apt: pkg={{item}} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - git
+    - subversion
+    - mercurial
+    - unzip
+  tags:
+    - gremlin
+
+- name: Clean gremlin
+  file: path=/home/vagrant/tinkergraph state=absent
+  tags:
+    - gremlin
+
+- name: Downlad gremlin 3.2.9
+  get_url: url=http://ftp.tudelft.nl/apache/tinkerpop/3.2.9/apache-tinkerpop-gremlin-server-3.2.9-bin.zip dest=/home/vagrant/tinkergraph.zip mode=0750
+  tags:
+    - gremlin
+
+- name: Unzip gremlin
+  unarchive: src=/home/vagrant/tinkergraph.zip dest=/home/vagrant copy=no owner=vagrant
+  tags:
+    - gremlin
+
+- name: Rename distribution to tinkergraph
+  shell: mv /home/vagrant/apache-tinkerpop-gremlin-server-3.2.9 /home/vagrant/tinkergraph
+  tags:
+    - gremlin
+
+- name: Clean tinkergraph.zip
+  file: path=/home/vagrant/tinkergraph.zip state=absent
+  tags:
+    - gremlin
+
+- name: Install neo4j
+  shell: cd /home/vagrant/tinkergraph; bin/gremlin-server.sh -i org.apache.tinkerpop neo4j-gremlin 3.2.9
+  tags:
+    - gremlin
+
+- name: create data directory
+  file: path=/home/vagrant/tinkergraph/db state=directory
+  tags:
+    - gremlin

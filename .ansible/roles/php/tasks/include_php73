@@ -1,0 +1,34 @@
+---
+- name: clone php-src
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=master force=yes
+  tags:
+    - php
+
+- name: checkout PHP 7.3
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=master clone=no force=yes
+  tags:
+    - php
+
+- name: build PHP 7.3
+  shell: cd /opt/source/php-src; make clean; ./buildconf --force; ./configure --prefix="/usr/local/bin/php-7.3" --with-config-file-path="/usr/local/etc/php-7.3" --enable-mbstring --enable-tokenizer --with-curl=/usr --enable-phar --with-sqlite3 --enable-json --disable-all; make -j {{ ansible_processor_count * 2 }} ; make install
+  tags:
+    - php
+
+- name: php73 config
+  file:
+    path: /usr/local/etc/php-7.3/
+    state: directory
+    mode: 0755
+
+- name: php73 config memory_limit
+  lineinfile:
+    dest: /usr/local/etc/php-7.3/php.ini
+    line: 'memory_limit = -1'
+    state: present
+    create: yes
+
+- name: php73 symlink
+  file: src=/usr/local/bin/php-7.3/bin/php dest=/usr/local/bin/php73 state=link
+  tags:
+    - php
+

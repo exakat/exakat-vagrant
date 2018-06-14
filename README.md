@@ -6,7 +6,7 @@ Builds a vagrant with [exakat](http://www.exakat.io/) and all dependencies insta
 How do I use it?
 ----------------
 
-Make sure you have all pre-requisite
+Make sure you have all pre-requisite in your host machine:
 
 * Ansible
 * Vagrant
@@ -31,6 +31,8 @@ More details
 This box is sized to handle projects up to 100k LOC of PHP. Larger projects do require more RAM and adaptation in config/config.ini.
 
 The ansible playbook may be used independantly to install exakat only : see role ['exakat'](https://github.com/exakat/exakat-vagrant/blob/master/.ansible/roles/exakat/tasks/main.yml).
+
+Put your projects of exakat inside ./projects, this folder will be automatically shared with the VM so you can execute exakat from inside the machine on your stuff.
 
 Author
 ------

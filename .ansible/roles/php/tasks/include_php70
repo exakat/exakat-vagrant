@@ -1,6 +1,6 @@
 ---
 - name: checkout PHP 7.0
-  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.0.15 clone=no force=yes
+  git: repo=https://github.com/php/php-src.git dest=/opt/source/php-src version=php-7.0.30 clone=no force=yes
   tags:
     - php
 
